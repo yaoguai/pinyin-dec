@@ -12,7 +12,7 @@ setup(
     # Basic information
     #
     name='pinyin-dec',
-    version='1.0.0',
+    version='1.0.1',
     author='yaoguai',
     author_email='lapislazulitexts@gmail.com',
     url='https://github.com/yaoguai/pinyin-dec',
