@@ -1,0 +1,69 @@
+.\" Copyright (c) 2015 Lapis Lazuli Texts
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining a
+.\" copy of this software and associated documentation files (the "Software"),
+.\" to deal in the Software without restriction, including without limitation
+.\" the rights to use, copy, modify, merge, publish, distribute, sublicense,
+.\" and/or sell copies of the Software, and to permit persons to whom the
+.\" Software is furnished to do so, subject to the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included in
+.\" all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.\" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.\" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.\" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.\" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+.\" FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+.\" DEALINGS IN THE SOFTWARE.
+.\"
+.TH PINYIN\-DEC 1 2015 pinyin-dec "Pinyin Decorate"
+.SH NAME
+pinyin\-dec \- decorate Pinyin text with its proper diacritics
+.SH SYNOPSIS
+.B pinyin\-dec
+[options] [string ...]
+.SH DESCRIPTION
+This program converts numbered Hanyu Pinyin text into its proper form with
+diacritics. Input strings are read from command-line arguments, or if none are
+provided, the input text is read from standard input (stdin). Text that does
+not look like a Pinyin word is generally ignored, and is preserved in its
+original form in the output.
+.PP
+The program knows about six Pinyin tone numbers: 1 (high), 2 (rising), 3 (low),
+4 (falling), and 0 or 5 (neutral). It also converts v or u: in Pinyin words
+into the proper form of ü. Capitalization also makes no difference, and
+pinyin\-dec is able to handle Pinyin text regardless of its capitalization.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+print usage information and then exit
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+include information useful for debugging
+.SH EXIT STATUS
+The exit status is 0 on normal termination, and 1 on error.
+.SH DIAGNOSTICS
+Errors will print a message to the standard error stream. To enable stack
+traces for debugging, enable the \*(lqverbose\*(rq option.
+.SH EXAMPLES
+.B
+$ pinyin\-dec Han4yu3 Pin1yin1
+.PP
+Reformat numbered Pinyin given as command-line arguments.
+.PP
+.B
+$ pinyin\-dec "Let's have some lu:4cha2 after class today."
+.PP
+Reformat numbered Pinyin while preserving the rest of the input.
+.PP
+.B
+$ cat mytext | pinyin\-dec > fancy_text
+.PP
+Use pinyin\-dec to reformat text read from the standard input.
+.SH BUGS
+Please contact the author if any bugs are found, or file a bug report with the
+project. Incomplete or inaccurate documentation should be treated as a bug.
+.SH AUTHOR
+yaoguai <http://lapislazulitexts.com/articles/pinyin_dec>

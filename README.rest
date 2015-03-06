@@ -1,0 +1,77 @@
+pinyin-dec
+==========
+
+pinyin-dec ("Pinyin Decorate") is a small command-line utility program for
+converting numbered Pinyin text to its proper form with diacritics. The basic
+form is the following::
+
+    Usage: pinyin-dec [options] [string ...]
+
+    Decorate Pinyin text with its proper diacritics.
+
+    Options:
+      -h, --help       print this help message and exit
+      -v, --verbose    include information useful for debugging
+
+A simple way to use it is like this::
+
+    $ pinyin-dec han4 yu3 pin1 yin1
+    hàn yǔ pīn yīn
+
+Another example::
+
+    $ pinyin-dec chai2 mi3 you2 yan2 jiang4 cu4 cha2
+    chái mǐ yóu yán jiàng cù chá
+
+It can also handle capitalized and conjoined Pinyin automatically::
+
+    $ pinyin-dec Han4yu3 Pin1yin1
+    Hànyǔ Pīnyīn
+
+It knows about the "v" and "u:" conventions, and converts them accordingly::
+
+    $ pinyin-dec NV3 nv3 NU:3 nu:3 LV4 lv4 LU:4 lu:4
+    NǙ nǚ NǙ nǚ LǛ lǜ LǛ lǜ
+
+It ignores English words and other things that don't look like Pinyin::
+
+    $ pinyin-dec "She is a nv3han4zi."
+    She is a nǚhànzi.
+
+It leaves punctuation alone too, as you can see::
+
+    $ pinyin-dec 'Confucius is "Kong3fu1zi3." Mencius is "Meng4zi3."'
+    Confucius is "Kǒngfūzǐ." Mencius is "Mèngzǐ."
+
+If no arguments are given, it just reads text from the standard input::
+
+    $ echo 'Sha1 ji1 xia4 hou2.' | pinyin-dec
+    Shā jī xià hóu.
+
+It also allows you to enter text and get the results one line at a time::
+
+    $ pinyin-dec
+    chi1 bu4 dao4 pu2 tao5 shuo1 pu2 tao5 suan1
+    chī bù dào pú tao shuō pú tao suān
+
+pinyin-dec is written as a traditional Unix-style command-line utility.
+Additionally, the main program module can be fully imported into Python so its
+internals are accessible to other programs.
+
+pinyin-dec is written in Python 3 and available under the MIT License.
+
+Installation
+------------
+
+To install these programs the "Python way," you can use setup.py::
+
+    # python3 setup.py install
+
+If you have pip installed, that is the best way.
+
+Documentation
+-------------
+
+pinyin-dec includes a Unix manual page ("manpage"), which is installed with the
+software. You can type "man pinyin-dec" to review the functions provided by the
+software, how to use it, and other program information.
