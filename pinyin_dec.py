@@ -42,7 +42,7 @@ Options:
 """
 
 SEARCH_REGEX = re.compile(
-    r"[aeiouüvAEIOUÜV]+(:|r|n|ng|R|N|NG)*\d(?!\d)")
+    r"[aeiouüvAEIOUÜV]+(:|r|n|ng|R|N|NG)*[0-5](?!\d)")
 
 PINYIN_TABLE = [
     ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ', 'Ā', 'Ē', 'Ī', 'Ō', 'Ū', 'Ǖ'],
@@ -90,20 +90,6 @@ def find_pinyin_word(text, start_idx=0):
     return None
 
 
-def tone_number(word):
-    """
-    From a numbered Pinyin word, determine the tone number.
-
-    Given a word numbered with the Pinyin tone number, return the number
-    for the tone. If there is no number attached to the word, then just
-    assume the fifth tone, since that has no diacritic and is unmarked.
-
-    """
-    if word[-1] >= '0' and word[-1] <= '5':
-        return int(word[-1])
-    return 5
-
-
 def word_nucleus(word):
     """
     Find the nucleus for a word in Pinyin.
@@ -114,12 +100,18 @@ def word_nucleus(word):
     function returns the nucleus character.
 
     """
-    key = [
-        ('a', 'a'), ('A', 'A'), ('e', 'e'), ('E', 'E'), ('ou', 'o'),
-        ('OU', 'O'), ('Ou', 'O'), ('oU', 'o')]
-    for a, b in key:
-        if a in word:
-            return b
+    if 'a' in word:
+        return 'a'
+    elif 'A' in word:
+        return 'A'
+    elif 'e' in word:
+        return 'e'
+    elif 'E' in word:
+        return 'E'
+    elif 'ou' in word or 'oU' in word:
+        return 'o'
+    elif 'OU' in word or 'Ou' in word:
+        return 'O'
     for i in range(len(word)-1, -1, -1):
         if word[i] in 'aeiouüvAEIOUÜV':
             return word[i]
@@ -136,22 +128,27 @@ def fix_pinyin_word(word):
     word's nucleus, and then formats the word as Pinyin with tone marks.
 
     """
-    word = word.replace('V', 'Ü').replace('U:', 'Ü')
-    word = word.replace('v', 'ü').replace('u:', 'ü')
+    if 'V' in word:
+        word = word.replace('V', 'Ü')
+    elif 'v' in word:
+        word = word.replace('v', 'ü')
+    elif 'U:' in word:
+        word = word.replace('U:', 'Ü')
+    elif 'u:' in word:
+        word = word.replace('u:', 'ü')
     if word[-1] == '0' or word[-1] == '5':
         return word[:-1]
-    elif word[-1] < '0' or word[-1] > '5':
+    elif word[-1] not in '1234':
         return word
     nucleus = word_nucleus(word)
-    tone = tone_number(word)
+    tone = int(word[-1])
     word = word[:-1]
     if nucleus is None:
         word += 'i'
         nucleus = 'i'
     index = PINYIN_TABLE[4].index(nucleus)
     tone_char = PINYIN_TABLE[tone-1][index]
-    left, _, right = word.rpartition(nucleus)
-    return ''.join((left, tone_char, right))
+    return word.replace(nucleus, tone_char)
 
 
 def fix_pinyin(pinyin_str):
